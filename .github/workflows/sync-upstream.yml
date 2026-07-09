@@ -25,14 +25,8 @@ jobs:
           sync_tags: "false"
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 部署到 caiai (caiai.ccwu.cc)
-        run: |
-          HASH=$(sha256sum _worker.js | cut -d" " -f1)
-          echo '{"_worker.js":"'"$HASH"'"}'> manifest.json
-          curl -s -X POST "https://api.cloudflare.com/client/v4/accounts/5d41e12dd90b5ffdd983188ff9910cff/pages/projects/caiai/deployments"             -H "Authorization: Bearer \${{ secrets.CF_API_TOKEN }}"             -F "manifest=@manifest.json"             -F "_worker.js@_worker.js"
+      - name: 部署到 caiai
+        run: HASH=$(sha256sum _worker.js | cut -d" " -f1); echo "{"_worker.js":"$HASH"}"> manifest.json; curl -s -X POST "https://api.cloudflare.com/client/v4/accounts/5d41e12dd90b5ffdd983188ff9910cff/pages/projects/caiai/deployments" -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" -F "manifest=@manifest.json" -F "_worker.js@_worker.js"
 
-      - name: 部署到 xiangmucfoo (mycooper.ccwu.cc)
-        run: |
-          HASH=$(sha256sum _worker.js | cut -d" " -f1)
-          echo '{"_worker.js":"'"$HASH"'"}'> manifest.json
-          curl -s -X POST "https://api.cloudflare.com/client/v4/accounts/5d41e12dd90b5ffdd983188ff9910cff/pages/projects/xiangmucfoo/deployments"             -H "Authorization: Bearer \${{ secrets.CF_API_TOKEN }}"             -F "manifest=@manifest.json"             -F "_worker.js@_worker.js"
+      - name: 部署到 xiangmucfoo
+        run: HASH=$(sha256sum _worker.js | cut -d" " -f1); echo "{"_worker.js":"$HASH"}"> manifest.json; curl -s -X POST "https://api.cloudflare.com/client/v4/accounts/5d41e12dd90b5ffdd983188ff9910cff/pages/projects/xiangmucfoo/deployments" -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" -F "manifest=@manifest.json" -F "_worker.js@_worker.js"
