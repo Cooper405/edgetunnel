@@ -25,13 +25,10 @@ jobs:
 
       - name: 部署到 Cloudflare Pages
         run: |
-          # 下载最新 _worker.js 并部署到 Pages
-          curl -L -o _worker.js https://raw.githubusercontent.com/Cooper405/edgetunnel/main/_worker.js
           HASH=$(sha256sum _worker.js | cut -d" " -f1)
           echo "{\"_worker.js\":\"$HASH\"}" > manifest.json
           curl -s -X POST "https://api.cloudflare.com/client/v4/accounts/5d41e12dd90b5ffdd983188ff9910cff/pages/projects/caiai/deployments" \
             -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" \
             -F "manifest=@manifest.json" \
-            -F "_worker.js=@_worker.js" \
-            -H "X-Auth-Email: ${{ secrets.CF_EMAIL }}"
+            -F "_worker.js@_worker.js"
 
